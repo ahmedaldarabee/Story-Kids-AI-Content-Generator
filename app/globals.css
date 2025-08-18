@@ -1,1 +1,9 @@
 @import "tailwindcss";
+
+body {
+    font-family: var(--font-roboto), sans-serif;
+}
+
+.btn-main {
+    @apply bg-sky-600 capitalize text-white py-2 px-4 text-sm font-semibold hover:bg-sky-800 cursor-pointer transition-all rounded-md
+}
