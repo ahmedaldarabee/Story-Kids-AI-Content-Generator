@@ -14,6 +14,7 @@ const StoryForm = () => {
         {id:1, name:"Story Book", src:"/img/storybook.png"},
         {id:2, name:"Education",  src:"/img/educational.png"},
         {id:3, name:"Bed Story",  src:"/img/bedstory.png"},
+        {id:3, name:"history Story",  src:"/img/history.png"},
     ]
     const [ageGroup,setAgeGroup] = useState("");
     const [loading,setLoading] = useState(false);
@@ -70,7 +71,7 @@ const StoryForm = () => {
                 <div className='space-y-2'>
                     <h2 className='text-xl font-semibold capitalize'>1. story type</h2>
 
-                    <div className='grid grid-cols-1 md:grid-cols-3 gap-4'>
+                    <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4'>
                         {storyType.map((type,idx) => (
                             <div
                                 onClick={() => setSelectedType(type.name)}

@@ -13,10 +13,9 @@ export const storyTable = pgTable("stories",{
     storySubject: varchar(),
     storyType:varchar(),
     ageGroup: varchar(),
-    
+    imageURL:varchar().default(""),
     // this section about content generation by AI
     content:json(),
-
     // references - this email that be as foreign form users table
     email:varchar('email').references(() => usersTable.email),
 })

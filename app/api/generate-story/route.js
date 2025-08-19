@@ -4,13 +4,12 @@ import { currentUser } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import { v4 as uuidv4 } from 'uuid';
 import { GoogleGenAI } from '@google/genai';
+import axios from "axios";
 
 export async function POST(req) {
     try {
-        // Parse request body
         const { storySubject, storyType, ageGroup } = await req.json();
 
-        // Validate required fields
         if (!storySubject || !storyType || !ageGroup) {
             return NextResponse.json(
                 { error: "Missing required fields: storySubject, storyType, or ageGroup" },
@@ -89,7 +88,7 @@ export async function POST(req) {
                 }
         `;
 
-        const ai = new GoogleGenAI(process.env.GEMINI_API_KEY);
+        const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
         const config = {
             responseMimeType: "application/json"
@@ -108,10 +107,11 @@ export async function POST(req) {
         ];
 
         const response = await ai.models.generateContent({
-            model,
-            contents,
-            config,
+            model: "gemini-2.0-flash-exp",
+            contents: [{ role: "user", parts: [{ text: PROMPT }] }],
+            generationConfig: { responseMimeType: "application/json" },
         });
+
 
         // Check if response exists and has the expected structure
         if (!response?.candidates?.[0]?.content?.parts?.[0]?.text) {
@@ -147,6 +147,9 @@ export async function POST(req) {
             );
         }
 
+        // image generation section
+        const imagePromptInfo = parsedResponse.story?.imagePrompt
+        const imageURL = await generateImage();
         const newStoryId = uuidv4();
 
         try {
@@ -155,6 +158,7 @@ export async function POST(req) {
                 storySubject,
                 storyType,
                 ageGroup,
+                imageURL:imageURL,
                 content: parsedResponse,
                 email: user?.emailAddresses?.[0]?.emailAddress,
             });
@@ -165,6 +169,7 @@ export async function POST(req) {
                 { status: 500 }
             );
         }
+
 
         return NextResponse.json({ 
             success: true, 
@@ -177,4 +182,24 @@ export async function POST(req) {
             details: process.env.NODE_ENV === 'development' ? error.message : undefined
         }, { status: 500 });
     }
+}
+
+const generateImage = async () => {
+    const BASE_URL='https://aigurulab.tech';
+    const result = await axios.post(BASE_URL+'/api/generate-image',
+        {
+            width: 1024,
+            height: 1024,
+            input: "self-portrait of a woman, lightning in the background",
+            model: 'sdxl',
+            aspectRatio:"16:9"
+        },
+        {
+            headers: {
+                'x-api-key': process.env.API_KEY,
+                'Content-Type': 'application/json',
+            },
+        })
+        
+    return result.data.image;
 }
