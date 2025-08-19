@@ -3,7 +3,6 @@
 import Image from 'next/image';
 import React, { useState } from 'react'
 import { clsx } from 'clsx';
-import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 
@@ -23,16 +22,13 @@ const StoryForm = () => {
     
     const handleSubmit = async () => {
         if(!storySubject.trim("") || !ageGroup || !selectedType){
-            toast.error('Sorry, complete story selecting options!');
             return;
         }else{
-            setLoading(true);
-            toast.success('story created successfully');
-            
+            setLoading(true);            
             try {
-                const res = await fetch("api/generate-story",{
+                const res = await fetch("/api/generate-story",{
                     method:"POST",
-                    header: { "Content-Type":"application/json"},
+                    headers: { "Content-Type":"application/json"},
                     body: JSON.stringify({
                         storySubject,
                         storyType: selectedType,
@@ -42,8 +38,7 @@ const StoryForm = () => {
 
                 if(!res.ok){
                     throw new Error("Sorry, Field in generation story");
-                }
-                
+                }                
                 // if response success, send user into my-stories page
                 route.push("/my-stories");
                 setLoading(false);
@@ -123,13 +118,15 @@ const StoryForm = () => {
                 </div>
             </div>
 
-            <Button
-                disabled={loading}
-                onClick={handleSubmit}
-                className="btn-main my-2"
-            >
-                {loading ? 'Generating...':'Generate your story'}
-            </Button>
+            <div className='w-full flex items-center justify-center'>
+                <button
+                    disabled={loading}
+                    onClick={handleSubmit}
+                    className="btn-main my-2"
+                >
+                    {loading ? 'Generating...':'Generate your story'}
+                </button>
+            </div>
         </div>
     )
 }
