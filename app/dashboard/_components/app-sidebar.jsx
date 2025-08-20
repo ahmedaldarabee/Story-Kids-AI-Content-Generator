@@ -15,8 +15,8 @@ export function AppSidebar() {
             icon: LayoutDashboard
         },{
             id:2,
-            name:"book",
-            path:"/my-stories",
+            name:"my stories",
+            path:"/dashboard/my-stories",
             icon: NotebookText
         },{
             id:3,

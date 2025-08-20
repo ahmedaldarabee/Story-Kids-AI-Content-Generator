@@ -10,7 +10,7 @@ const Banner = () => {
                     <p className="max-w-lg text-sm">Let your child explore enchanted lands and heroic quests—AI brings their next adventure to life in seconds.</p>
 
                     <Button className="btn-main hover:!bg-sky-500 hover:!px-10 transition-all duration-300">
-                        create your story
+                        Craft Your Magical Story
                     </Button>
                 </div>
                 

@@ -3,7 +3,6 @@
 import Image from 'next/image';
 import React, { useState } from 'react'
 import { clsx } from 'clsx';
-import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 
 const StoryForm = () => {
@@ -41,10 +40,11 @@ const StoryForm = () => {
                     throw new Error("Sorry, Field in generation story");
                 }                
                 // if response success, send user into my-stories page
-                route.push("/my-stories");
+                route.push("/dashboard/my-stories");
                 setLoading(false);
+                setStorySubject("");
+                
             } catch (error) {
-                toast.error(`Sorry, fetching error ${error}!`);
                 setLoading(false);
             }
         }

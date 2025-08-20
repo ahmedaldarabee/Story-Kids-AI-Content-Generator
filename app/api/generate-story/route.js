@@ -26,7 +26,6 @@ export async function POST(req) {
         }
 
         if (!process.env.GEMINI_API_KEY) {
-            console.error("GEMINI_API_KEY is not set");
             return NextResponse.json(
                 { error: "Server configuration error" },
                 { status: 500 }
@@ -149,7 +148,7 @@ export async function POST(req) {
 
         // image generation section
         const imagePromptInfo = parsedResponse.story?.imagePrompt
-        const imageURL = await generateImage();
+        const imageURL = await generateImage(imagePromptInfo);
         const newStoryId = uuidv4();
 
         try {
@@ -184,13 +183,13 @@ export async function POST(req) {
     }
 }
 
-const generateImage = async () => {
+const generateImage = async (imagePromptInfo) => {
     const BASE_URL='https://aigurulab.tech';
     const result = await axios.post(BASE_URL+'/api/generate-image',
         {
             width: 1024,
             height: 1024,
-            input: "self-portrait of a woman, lightning in the background",
+            input: imagePromptInfo,
             model: 'sdxl',
             aspectRatio:"16:9"
         },
