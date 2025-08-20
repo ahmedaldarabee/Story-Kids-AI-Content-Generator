@@ -5,10 +5,16 @@ import Banner from "../_components/Banner"
 import clsx from "clsx";
 import { Loader2 } from "lucide-react";
 import Link from "next/link";
+import animationImg from '/public/animations/searchimm.json'
+import Lottie from "lottie-react";
 
 const MyStories = () => {
     const [stories,setStories] = useState([]);
     const [loading,setLoading] = useState(false);
+
+    const [searchTerm,setSearchTerm] = useState('');
+    const [filterType,setFilterType] = useState('');
+    const [filterAgeGroup,setFilterAgeGroup] = useState('')
 
     useEffect(() => {
         async function fetchStories(){
@@ -34,13 +40,22 @@ const MyStories = () => {
         fetchStories();
     },[]);
 
+    // filter section - try to understand how it works
+
+    const filteredStories = stories.filter(story => {
+
+        const matchesSearch = story?.content?.story?.title?.toLowerCase().includes(searchTerm.toLowerCase());
+        const matchesType   = filterType ? story.storyType === filterType : true;
+        const matchesAge    = filterAgeGroup ? story.ageGroup === filterAgeGroup : true;
+
+        return matchesSearch && matchesType && matchesAge
+    })
+
     if(loading){
         return (
             <div className="flex gap-2 w-full min-h-screen items-center justify-center text-xl">
                 <span className="text-sky-600">Please wait</span>
-                <Loader2
-                    className="animate-spin h-6 w-6 text-sky-600"
-                />
+                <Loader2 className="animate-spin h-6 w-6 text-sky-600"/>
             </div>
         )
     }
@@ -52,9 +67,47 @@ const MyStories = () => {
             <div className="container mx-auto px-10 py-4">
                 <h2 className="capitalize text-xl font-medium">my <span className="text-sky-600">stories</span> </h2>
 
+                <div
+                    className="flex flex-col sm:flex-row gap-4 my-6 justify-center items-center"
+                >
+
+                <input
+                    type="text"
+                    placeholder="search by title"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="outline-none border border-sky-300 focus:border-sky-600 rounded-md px-3 py-2 sm:w-64"
+                />
+
+                <select
+                    value={filterType}
+                    onChange={(e) => setFilterType(e.target.value)}
+                    className="border border-sky-300 rounded px-3 py-2 w-full sm:w-48"
+                >
+                    <option value="">All Types</option>
+                    <option value="Education">Educational</option>
+                    <option value="Bed Story">Bed Story</option>
+                    <option value="history Story">history Story</option>
+                    <option value="Story Book">Story Book</option>
+                </select>
+                
+                <select
+                    value={filterAgeGroup}
+                    onChange={(e) => setFilterAgeGroup(e.target.value)}
+                    className="border border-sky-300 rounded px-3 py-2 w-full sm:w-48"
+                >
+                    <option value="">All Ages</option>
+                    <option value="0-2 Years">0-2 Years</option>
+                    <option value="3-5 Years">3-5 Years</option>
+                    <option value="6-8 Years">6-8 Years</option>
+                </select>
+
+                </div>
+
                 <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-4 my-4">
 
-                    {stories.map((story,idx) => (
+                    {
+                        filteredStories.length > 0 ? filteredStories.map((story,idx) => (
                         <Link
                             key={idx}
                             href={`/dashboard/story/${story.storyId}`}
@@ -80,7 +133,17 @@ const MyStories = () => {
 
                             </div>
                         </Link>
-                    ))}
+                        ))
+                    :   (
+                        <p className="w-full text-center col-span-full space-x-2 "> 
+                            <Lottie
+                                animationData={animationImg}
+                                loop={true} 
+                                style={{ height: 350, width: 350 }}
+                            />
+                        </p>
+                    )
+                    }
                 </div>
             </div>
 
