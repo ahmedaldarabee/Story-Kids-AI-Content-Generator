@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import Banner from "../_components/Banner"
 import clsx from "clsx";
 import { Loader2 } from "lucide-react";
+import Link from "next/link";
 
 const MyStories = () => {
     const [stories,setStories] = useState([]);
@@ -54,27 +55,31 @@ const MyStories = () => {
                 <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-4 my-4">
 
                     {stories.map((story,idx) => (
-                        <div 
+                        <Link
                             key={idx}
-                            className={clsx(
-                                'bg-white rounded-md shadow-md overflow-hidden hover:shadow-lg hover:scale-105 transition-all duration-300 hover:border hover:border-sky-600 space-y-2 p-2 cursor-pointer'
-                            )}
+                            href={`/dashboard/story/${story.storyId}`}
                         >
+                            <div 
+                                className={clsx(
+                                    'bg-white rounded-md shadow-md overflow-hidden hover:shadow-lg hover:scale-105 transition-all duration-300 hover:border hover:border-sky-600 space-y-2 p-2 cursor-pointer'
+                                )}
+                            >
 
-                            <img
-                                src={story?.imageURL}
-                                alt="story image"
-                                className="w-full h-48 object-cover"
-                            />
+                                <img
+                                    src={story?.imageURL}
+                                    alt="story image"
+                                    className="w-full h-48 object-cover"
+                                />
 
-                            <div className="p-4 bg-gray-100">
-                                <h2 className="text-xl text-sky-600 font-semibold truncate">{story.content?.story?.title}</h2>
+                                <div className="p-4 bg-gray-100">
+                                    <h2 className="text-xl text-sky-600 font-semibold truncate">{story.content?.story?.title}</h2>
 
-                                <strong className="text-lg block">{story.storyType}</strong>
-                                <small className="block text-gray-500">{story.ageGroup}</small>
+                                    <strong className="text-lg block">{story.storyType}</strong>
+                                    <small className="block text-gray-500">{story.ageGroup}</small>
+                                </div>
+
                             </div>
-
-                        </div>
+                        </Link>
                     ))}
                 </div>
             </div>
