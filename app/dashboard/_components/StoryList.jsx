@@ -14,11 +14,8 @@ const StoryList = () => {
             <div className='container mx-auto'>
 
                 <div className='flex  flex-col items-center gap-4'>
-                    {/* title */}
-
-                    <h2 className='text-[20px] font-semibold'> <span className='text-sky-600'>Stories</span> that you have</h2>
-
-                    {/* content */}
+                
+                    <h2 className='text-[20px] font-semibold'> <span className='text-sky-600'>Ready</span> to craft your next adventure? Start your story now!</h2>
                     {
                         stories.length === 0 ? (
                             <>

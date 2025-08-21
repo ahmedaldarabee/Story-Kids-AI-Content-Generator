@@ -84,17 +84,15 @@ const StoryDetails = () => {
                     <h3 className='font-medium capitalize text-xl'> <span className='text-sky-600'>story</span> chapters </h3>
                 </div>
 
-                <div className='w-full flex flex-col items-center justify-center gap-4 space-y-6 '>
+                <div className='grid grid-cols-1 md:grid-cols-3 gap-4'>
                     {story?.content?.story?.pages?.map((page,idx) => (
                         <div
                             key={idx}
-                            className='p-4 border hover:border-sky-600 transition-all duration-300 cursor-pointer hover:shadow-md space-y-2 rounded-md max-w-3xl'
+                            className='p-4 border hover:border-sky-600 transition-all duration-300 cursor-pointer hover:shadow-lg hover:-translate-y-2 hover:scale-105 transform space-y-2 rounded-md'
                         >
+                            <h3 className='font-semibold truncate'> Chapter {page.pageNumber}: {page.title}</h3>
 
-                        <h3 className='hover:whitespace-normal hover:overflow-visible hover:max-w-full text-sky-600 font-semibold text-xl truncate max-w-[200px] transition-all duration-300'> Chapter {page.pageNumber}: {page.title}</h3>
-
-                        <p className='text-gray-500 max-w-[300px] hover:text-gray-600 transition-all duration-300 cursor-pointer'
-                        >{page.content}</p>
+                            <p className='text-gray-500 cursor-pointer text-sm'>{page.content}</p>
 
                         </div>
                     ))}
